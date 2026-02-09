@@ -4,45 +4,75 @@
 
 @layer base {
   :root {
+    /* Deep Jungle Green Background */
     --background: #0B1D22;
+    /* White Text */
     --foreground: #ffffff;
+
+    /* WFP Brand Colors */
+    --primary: #26b3cc;
+    --primary-dark: #1d8a9e;
+    --primary-light: #6de5f7;
+    --accent: #FDCC34;
+
+    /* Surface Colors */
+    --surface: #14282E;
+    --surface-light: #1c363f;
   }
 }
 
 body {
   background-color: var(--background);
   color: var(--foreground);
+  /* Noise Texture Overlay */
   background-image:
-    radial-gradient(circle at 50% 0%, rgba(38, 179, 204, 0.08), transparent 40%),
-    radial-gradient(circle at 0% 50%, rgba(38, 179, 204, 0.03), transparent 30%),
-    url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.03'/%3E%3C/svg%3E");
+    radial-gradient(circle at 15% 50%, rgba(38, 179, 204, 0.08), transparent 25%),
+    radial-gradient(circle at 85% 30%, rgba(38, 179, 204, 0.05), transparent 25%),
+    url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.04'/%3E%3C/svg%3E");
+  background-attachment: fixed;
+  font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  -webkit-font-smoothing: antialiased;
 }
 
-/* Hide Scrollbar */
-.hide-scrollbar::-webkit-scrollbar {
-  display: none;
+/* Scrollbar Customization */
+::-webkit-scrollbar {
+  width: 8px;
 }
 
+::-webkit-scrollbar-track {
+  background: var(--background);
+}
+
+::-webkit-scrollbar-thumb {
+  background: #264a52;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--primary);
+}
+
+/* Utility Class for Glassmorphism */
+.glass {
+  background: rgba(20, 40, 46, 0.6);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.glass-hover:hover {
+  background: rgba(38, 179, 204, 0.1);
+  border-color: rgba(38, 179, 204, 0.3);
+}
+
+/* Remove default scrollbar for horizontal categories but keep functionality */
 .hide-scrollbar {
   -ms-overflow-style: none;
+  /* IE and Edge */
   scrollbar-width: none;
+  /* Firefox */
 }
 
-/* Custom Scrollbar for Grid */
-.custom-scrollbar::-webkit-scrollbar {
-  width: 6px;
-}
-
-.custom-scrollbar::-webkit-scrollbar-track {
-  background: rgba(255, 255, 255, 0.05);
-  border-radius: 4px;
-}
-
-.custom-scrollbar::-webkit-scrollbar-thumb {
-  background: rgba(38, 179, 204, 0.3);
-  border-radius: 4px;
-}
-
-.custom-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: rgba(38, 179, 204, 0.5);
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
 }
