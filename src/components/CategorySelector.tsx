@@ -20,8 +20,8 @@ interface CategorySelectorProps {
 
 export default function CategorySelector({ selectedCategory, onSelect }: CategorySelectorProps) {
     return (
-        <div className="w-full overflow-x-auto pb-4 hide-scrollbar">
-            <div className="flex gap-4 min-w-max px-2">
+        <div className="w-full overflow-x-auto pb-6 hide-scrollbar">
+            <div className="flex gap-4 min-w-max px-2 md:justify-center">
                 {CATEGORIES.map((cat, index) => {
                     const Icon = iconMap[cat.icon];
                     const isSelected = selectedCategory === cat.id;
@@ -31,38 +31,32 @@ export default function CategorySelector({ selectedCategory, onSelect }: Categor
                             key={cat.id}
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
-                            transition={{ delay: index * 0.1 }}
+                            transition={{ delay: index * 0.05 }}
                             onClick={() => onSelect(cat.id)}
+                            whileHover={{ scale: 1.02 }}
+                            whileTap={{ scale: 0.98 }}
                             className={clsx(
-                                "group relative flex items-center gap-3 px-6 py-4 rounded-xl transition-all duration-300 border",
+                                "group relative flex flex-col md:flex-row items-center gap-3 px-6 py-4 rounded-2xl transition-all duration-300 min-w-[120px] md:min-w-[180px]",
                                 isSelected
-                                    ? "bg-primary/10 border-primary shadow-[0_0_15px_rgba(38,179,204,0.2)]"
-                                    : "bg-white/5 border-white/10 hover:border-primary/50 hover:bg-white/10"
+                                    ? "bg-primary shadow-[0_0_20px_rgba(38,179,204,0.25)]"
+                                    : "bg-surface/40 hover:bg-surface/80 border border-white/5 hover:border-white/10"
                             )}
                         >
                             <div className={clsx(
-                                "p-2 rounded-lg transition-colors",
-                                isSelected ? "bg-primary text-white" : "bg-white/10 text-muted group-hover:text-white"
+                                "p-2.5 rounded-xl transition-colors",
+                                isSelected ? "bg-white/20 text-white" : "bg-white/5 text-muted group-hover:text-primary-light"
                             )}>
-                                <Icon className="w-5 h-5" />
+                                <Icon className="w-6 h-6" />
                             </div>
 
-                            <div className="text-left">
+                            <div className="text-center md:text-left">
                                 <h3 className={clsx(
-                                    "font-semibold text-sm transition-colors",
-                                    isSelected ? "text-primary-light" : "text-white group-hover:text-primary-light"
+                                    "font-bold text-sm md:text-base transition-colors",
+                                    isSelected ? "text-white" : "text-muted group-hover:text-white"
                                 )}>
                                     {cat.name}
                                 </h3>
                             </div>
-
-                            {isSelected && (
-                                <motion.div
-                                    layoutId="activeCategory"
-                                    className="absolute inset-0 border-2 border-primary rounded-xl z-10"
-                                    transition={{ type: "spring", stiffness: 300, damping: 30 }}
-                                />
-                            )}
                         </motion.button>
                     );
                 })}
