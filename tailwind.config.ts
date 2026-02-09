@@ -10,14 +10,15 @@ const config: Config = {
     extend: {
       colors: {
         background: "#0B1D22",
-        foreground: "#122A31",
+        foreground: "#ffffff",
         primary: {
           DEFAULT: "#26b3cc",
-          light: "#4ACCC7",
-          dark: "#047772",
+          light: "#6de5f7",
+          dark: "#1d8a9e",
         },
         accent: "#FDCC34",
         muted: "#94A3B8",
+        surface: "#14282E",
       },
       fontFamily: {
         sans: ["var(--font-inter)"],
