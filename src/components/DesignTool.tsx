@@ -128,13 +128,11 @@ export default function DesignTool() {
                                         </div>
 
                                         <div className="space-y-4">
-                                            <div className={!uploadedImage ? 'opacity-50 pointer-events-none grayscale' : ''}>
-                                                <ContactForm
-                                                    onSubmit={handleFormSubmit}
-                                                    isLoading={isSubmitting}
-                                                    isDisabled={!uploadedImage}
-                                                />
-                                            </div>
+                                            <ContactForm
+                                                onSubmit={handleFormSubmit}
+                                                isLoading={isSubmitting}
+                                                isDisabled={false}
+                                            />
                                         </div>
                                     </div>
                                 </motion.div>
