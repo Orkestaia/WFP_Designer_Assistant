@@ -22,6 +22,7 @@ export default function ProductGrid({ categoryId, selectedProduct, onSelectProdu
             setLoading(true);
             try {
                 const categoriesToFetch = DB_CATEGORIES_MAP[categoryId] || [];
+                console.log('🔍 Fetching products for:', { categoryId, categoriesToFetch });
 
                 let query = supabase
                     .from('products')
@@ -40,10 +41,19 @@ export default function ProductGrid({ categoryId, selectedProduct, onSelectProdu
 
                 const { data, error } = await query.limit(50);
 
+                console.log('📊 Product fetch result:', {
+                    categoryId,
+                    categoriesToFetch,
+                    count: data?.length || 0,
+                    hasError: !!error,
+                    errorMessage: error?.message,
+                    errorDetails: error
+                });
+
                 if (error) throw error;
                 setProducts(data || []);
             } catch (err) {
-                console.error("Error fetching products:", err);
+                console.error("❌ Error fetching products:", err);
             } finally {
                 setLoading(false);
             }
@@ -67,6 +77,7 @@ export default function ProductGrid({ categoryId, selectedProduct, onSelectProdu
         return (
             <div className="text-center py-20 border border-dashed border-white/10 rounded-xl">
                 <p className="text-muted">No products found in this category.</p>
+                <p className="text-xs text-muted/50 mt-2">Check browser console (F12) for details</p>
             </div>
         );
     }
