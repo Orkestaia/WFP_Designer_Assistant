@@ -1,22 +1,25 @@
--- Create products table
-CREATE TABLE IF NOT EXISTS products (
+-- Create design_requests table
+CREATE TABLE IF NOT EXISTS design_requests (
     id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
     name TEXT NOT NULL,
-    description TEXT,
-    price NUMERIC,
-    category TEXT NOT NULL,
-    image_url TEXT,
-    active BOOLEAN DEFAULT true,
+    email TEXT NOT NULL,
+    phone TEXT,
+    product_id TEXT,
+    product_name TEXT,
+    product_category TEXT,
+    original_image_url TEXT,
+    status TEXT DEFAULT 'pending',
     created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now())
 );
 
--- Enable Row Level Security
-ALTER TABLE products ENABLE ROW LEVEL SECURITY;
+-- Enable RLS for design_requests
+ALTER TABLE design_requests ENABLE ROW LEVEL SECURITY;
 
--- Create policy to allow public read access
-CREATE POLICY "Allow public read access" ON products
-    FOR SELECT TO public USING (true);
-
--- Create policy to allow service role full access (for seeding)
-CREATE POLICY "Allow service role full access" ON products
+-- Allow service role full access
+CREATE POLICY "Allow service role full access for design_requests" ON design_requests
     FOR ALL TO service_role USING (true) WITH CHECK (true);
+
+-- Storage bucket instructions (Run in Supabase Dashboard):
+-- 1. Go to Storage
+-- 2. Create a new bucket named 'user-uploads'
+-- 3. Make it PUBLIC

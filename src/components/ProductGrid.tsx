@@ -83,7 +83,7 @@ export default function ProductGrid({ categoryId, selectedProduct, onSelectProdu
     }
 
     return (
-        <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-3 gap-4 md:gap-6 overflow-y-auto max-h-[600px] pr-2 custom-scrollbar">
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 overflow-y-auto max-h-[500px] pr-1 custom-scrollbar">
             {products.map((product) => (
                 <ProductCard
                     key={product.id}

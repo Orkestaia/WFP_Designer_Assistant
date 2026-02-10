@@ -4,215 +4,113 @@ import path from 'path';
 
 dotenv.config({ path: path.resolve(process.cwd(), '.env.local') });
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+const supabase = createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.SUPABASE_SERVICE_ROLE_KEY!
+);
 
-if (!supabaseUrl || !supabaseServiceKey) {
-    console.error('❌ Missing Supabase credentials');
-    process.exit(1);
-}
-
-const supabase = createClient(supabaseUrl, supabaseServiceKey);
-
-// Curated WFP products from the export CSV
+// Products using REAL WFP image URLs from CSV + local files
 const WFP_PRODUCTS = [
-    // OUTDOOR FOUNTAINS
+    // FROM LOCAL WFP IMAGES
     {
-        name: "Cast Iron Langdon Fountain",
-        description: "Cast Iron Langdon Fountain is a classy, elegant centerpiece crafted from solid cast iron. Brings tranquil water movement to courtyards and estates.",
-        price: 12500,
-        category: "Outdoor Fountains",
-        image_url: "https://waterfeaturepros.com/wp-content/uploads/2024/05/langdon-iron-pros.jpg",
-        active: true
-    },
-    {
-        name: "Henri Studio Three Tier Fleur De Lis",
-        description: "Classic three-tier fountain with ornate Fleur De Lis details, perfect for elegant gardens.",
-        price: 4200,
-        category: "Outdoor Fountains",
-        image_url: "https://waterfeaturepros.com/wp-content/uploads/2021/01/Henri_Studio_HS10055f1_Garden_Fountains_03_TBP.jpg",
-        active: true
-    },
-    {
-        name: "Grand Estate Lion Fountain",
-        description: "Majestic lion head fountain bringing European elegance to your outdoor space.",
-        price: 5800,
-        category: "Outdoor Fountains",
-        image_url: "https://waterfeaturepros.com/wp-content/uploads/2020/07/grande-leones.jpg",
-        active: true
-    },
-    {
-        name: "Massarelli Classical Tiered Fountain",
-        description: "Traditional tiered design with classical sculptural elements.",
-        price: 3500,
-        category: "Outdoor Fountains",
-        image_url: "https://waterfeaturepros.com/wp-content/uploads/2020/07/massarelli-classical.jpg",
-        active: true
-    },
-    {
-        name: "Cavern Falls XL Cascade",
-        description: "Dramatic large-scale waterfall feature creating stunning visual and audio impact.",
+        name: "Cavern Falls Water Feature",
+        description: "Dramatic cascading waterfall feature. Creates stunning visual and natural sound effects in any outdoor space.",
         price: 8900,
         category: "Outdoor Fountains",
-        image_url: "https://waterfeaturepros.com/wp-content/uploads/2020/06/Cavern-Falls-Kids-Jumping-21.jpg",
+        image_url: "/wfp-cavern-falls.jpg",
         active: true
     },
-
-    // POOL FEATURES
     {
-        name: "Sheer Descent Waterfall 24 inch",
-        description: "Creates a clear arc of water projecting away from pool wall. Modern and elegant.",
-        price: 3200,
+        name: "Classic Stone Garden Fountain",
+        description: "Beautifully crafted stone fountain, perfect for traditional and modern garden settings alike.",
+        price: 4500,
+        category: "Outdoor Fountains",
+        image_url: "/wfp-fountain-1.jpg",
+        active: true
+    },
+    {
+        name: "Kasco VFX Series with RGB LED",
+        description: "Professional aerating fountain with color-changing RGB LED lighting. Perfect for ponds and lakes.",
+        price: 6200,
         category: "Pool Features",
-        image_url: "https://waterfeaturepros.com/wp-content/uploads/2020/07/sheer-descent-pool.jpg",
+        image_url: "/wfp-kasco-vfx.png",
         active: true
     },
     {
-        name: "Pool Deck Jets Set of 4",
-        description: "Creates beautiful arcs of shimmering water from deck to pool.",
-        price: 1800,
-        category: "Pool Features",
-        image_url: "https://waterfeaturepros.com/wp-content/uploads/2020/07/deck-jets-pool.jpg",
-        active: true
-    },
-    {
-        name: "Pool Scupper Spillway 18 inch",
-        description: "Sleek stainless steel scupper creating smooth water sheet into pool.",
-        price: 950,
-        category: "Pool Features",
-        image_url: "https://waterfeaturepros.com/wp-content/uploads/2020/07/scupper-spillway.jpg",
-        active: true
-    },
-
-    // WALL FOUNTAINS
-    {
-        name: "Modern Copper Wall Cascade",
-        description: "Stunning copper sheet fountain that develops beautiful patina over time.",
-        price: 2400,
-        category: "Wall Fountains",
-        image_url: "https://waterfeaturepros.com/wp-content/uploads/2020/07/copper-wall-fountain.jpg",
-        active: true
-    },
-    {
-        name: "Slate Wall Waterfall Panel",
-        description: "Natural slate wall fountain with gentle, soothing water flow.",
-        price: 1850,
-        category: "Wall Fountains",
-        image_url: "https://waterfeaturepros.com/wp-content/uploads/2020/07/slate-wall-panel.jpg",
-        active: true
-    },
-    {
-        name: "Lion Head Wall Spout",
-        description: "Classic wall-mounted lion head fountain with rustic bronze finish.",
-        price: 650,
-        category: "Wall Fountains",
-        image_url: "https://waterfeaturepros.com/wp-content/uploads/2020/07/lion-head-spout.jpg",
-        active: true
-    },
-
-    // FIRE & WATER
-    {
-        name: "Prometheus Fire Bowl with Water",
-        description: "Stunning combination of fire and water in elegant concrete bowl.",
-        price: 4200,
-        category: "Fire & Water Features",
-        image_url: "https://waterfeaturepros.com/wp-content/uploads/2020/07/fire-water-bowl.jpg",
-        active: true
-    },
-    {
-        name: "Grand Effects Fire Fountain System",
-        description: "Integrated fire and water feature creating dramatic nighttime display.",
-        price: 6500,
-        category: "Fire & Water Features",
-        image_url: "https://waterfeaturepros.com/wp-content/uploads/2020/07/fire-fountain-system.jpg",
-        active: true
-    },
-
-    // INDOOR FOUNTAINS
-    {
-        name: "Tabletop Zen Garden Fountain",
-        description: "Small indoor fountain perfect for desk or meditation space.",
-        price: 180,
-        category: "Indoor Fountains",
-        image_url: "https://waterfeaturepros.com/wp-content/uploads/2020/07/zen-tabletop.jpg",
-        active: true
-    },
-    {
-        name: "Floor Standing Slate Tower",
-        description: "Contemporary indoor fountain with stacked slate design.",
-        price: 850,
-        category: "Indoor Fountains",
-        image_url: "https://waterfeaturepros.com/wp-content/uploads/2020/07/slate-tower-indoor.jpg",
-        active: true
-    },
-
-    // MORE OUTDOOR FOUNTAINS
-    {
-        name: "Tuscan Villa Garden Fountain",
-        description: "Elegant three-tier fountain inspired by Italian Renaissance gardens.",
+        name: "Sunset Corner Fountain",
+        description: "Elegant corner water feature that captures the beauty of golden hour. Perfect for patios and courtyards.",
         price: 3800,
         category: "Outdoor Fountains",
-        image_url: "https://waterfeaturepros.com/wp-content/uploads/2020/07/tuscan-villa.jpg",
+        image_url: "/wfp-sunset-fountain.jpeg",
+        active: true
+    },
+    // FROM CSV - REAL WFP CDN URLS
+    {
+        name: "Fiore Pond Spray Ring 74\"",
+        description: "Premium pond spray ring with 1/8\" nozzles and 7 inch spacing. Creates beautiful water displays.",
+        price: 2799,
+        category: "Pool Features",
+        image_url: "https://waterfeaturepros.com/wp-content/uploads/2025/10/Teddys-landscape-3-2019.jpg",
         active: true
     },
     {
-        name: "Modern Sphere Water Feature",
-        description: "Minimalist sphere fountain for contemporary landscapes.",
-        price: 1200,
-        category: "Outdoor Fountains",
-        image_url: "https://waterfeaturepros.com/wp-content/uploads/2020/07/modern-sphere.jpg",
+        name: "Indoor Hood Cover",
+        description: "Protective indoor hood cover for serene water features. Keeps your fountain clean and protected.",
+        price: 320,
+        category: "Indoor Fountains",
+        image_url: "https://waterfeaturepros.com/wp-content/uploads/2025/02/serenewatersindoorhoodcover3.png",
         active: true
     },
     {
-        name: "Urn Garden Fountain Classic",
-        description: "Traditional urn-style fountain with timeless appeal.",
-        price: 980,
+        name: "Outdoor Hood Cover",
+        description: "Durable outdoor hood cover designed to protect your water feature from the elements.",
+        price: 481,
         category: "Outdoor Fountains",
-        image_url: "https://waterfeaturepros.com/wp-content/uploads/2020/07/urn-fountain.jpg",
+        image_url: "https://waterfeaturepros.com/wp-content/uploads/2025/02/Outdoor.jpg",
         active: true
-    }
+    },
+    {
+        name: "LED Color Programmable Lights",
+        description: "Add stunning color-changing LED lights to any water feature. Multiple color modes and effects.",
+        price: 80,
+        category: "Pool Features",
+        image_url: "https://waterfeaturepros.com/wp-content/uploads/2025/02/ledbulbscontroller.jpg",
+        active: true
+    },
+    {
+        name: "Frothy Fountain Nozzle Bronze 2\"",
+        description: "Premium bronze frothy fountain nozzle by EasyPro. Creates beautiful foamy water effects.",
+        price: 199,
+        category: "Pool Features",
+        image_url: "https://waterfeaturepros.com/wp-content/uploads/2025/02/EP-Frothy-Nozzle.png",
+        active: true
+    },
 ];
 
-async function importProducts() {
-    console.log('🚀 Starting WFP product import...\n');
+async function run() {
+    console.log('🚀 Importing WFP products with REAL images...\n');
 
-    // Clear existing products
-    console.log('🗑️  Clearing old products...');
-    const { error: deleteError } = await supabase
+    // Clear old products
+    const { error: delErr } = await supabase
         .from('products')
         .delete()
         .neq('id', '00000000-0000-0000-0000-000000000000');
 
-    if (deleteError) {
-        console.warn('⚠️  Error clearing:', deleteError.message);
-    } else {
-        console.log('✅ Cleared old products\n');
-    }
+    if (delErr) console.warn('⚠️', delErr.message);
+    else console.log('✅ Cleared old products\n');
 
-    // Insert WFP products
-    let successCount = 0;
-    let errorCount = 0;
-
-    console.log('📦 Inserting real WFP products...\n');
-
-    for (const product of WFP_PRODUCTS) {
-        const { error } = await supabase
-            .from('products')
-            .insert(product);
-
+    let success = 0;
+    for (const p of WFP_PRODUCTS) {
+        const { error } = await supabase.from('products').insert(p);
         if (error) {
-            console.error(`❌ ${product.name}: ${error.message}`);
-            errorCount++;
+            console.error(`❌ ${p.name}: ${error.message}`);
         } else {
-            console.log(`✅ ${product.name} - ${product.category}`);
-            successCount++;
+            console.log(`✅ ${p.name} - ${p.category}`);
+            success++;
         }
     }
 
-    console.log(`\n🎉 Import complete!`);
-    console.log(`   ✅ Success: ${successCount}`);
-    console.log(`   ❌ Errors: ${errorCount}`);
-    console.log(`   📊 Total: ${WFP_PRODUCTS.length}`);
+    console.log(`\n🎉 Imported ${success}/${WFP_PRODUCTS.length} products`);
 }
 
-importProducts();
+run();
