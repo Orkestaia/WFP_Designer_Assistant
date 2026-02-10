@@ -18,8 +18,11 @@ export default function ContactForm({ onSubmit, isLoading, isDisabled }: Contact
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
             <div className="space-y-4">
                 <div>
-                    <label className="block text-sm font-medium text-muted mb-1.5">Full Name</label>
+                    <label htmlFor="name" className="block text-sm font-medium text-muted mb-1.5">Full Name</label>
                     <input
+                        id="name"
+                        type="text"
+                        autoComplete="name"
                         {...register("name", { required: "Name is required" })}
                         className={clsx(
                             "w-full px-4 py-3 rounded-lg bg-white/5 border text-white focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all",
@@ -31,8 +34,11 @@ export default function ContactForm({ onSubmit, isLoading, isDisabled }: Contact
                 </div>
 
                 <div>
-                    <label className="block text-sm font-medium text-muted mb-1.5">Email Address</label>
+                    <label htmlFor="email" className="block text-sm font-medium text-muted mb-1.5">Email Address</label>
                     <input
+                        id="email"
+                        type="email"
+                        autoComplete="email"
                         {...register("email", {
                             required: "Email is required",
                             pattern: { value: /^\S+@\S+$/i, message: "Invalid email format" }
@@ -47,8 +53,11 @@ export default function ContactForm({ onSubmit, isLoading, isDisabled }: Contact
                 </div>
 
                 <div>
-                    <label className="block text-sm font-medium text-muted mb-1.5">Phone (Optional)</label>
+                    <label htmlFor="phone" className="block text-sm font-medium text-muted mb-1.5">Phone (Optional)</label>
                     <input
+                        id="phone"
+                        type="tel"
+                        autoComplete="tel"
                         {...register("phone")}
                         className="w-full px-4 py-3 rounded-lg bg-white/5 border border-white/10 text-white focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all"
                         placeholder="(555) 123-4567"
